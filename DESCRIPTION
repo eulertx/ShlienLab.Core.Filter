@@ -1,0 +1,13 @@
+Package: ShlienLab.Core.Filter
+Type: Package
+Title: ShlienLab.Core.Filter
+Version: 0.3.2
+Author: L. Christine Schreiner
+Maintainer: L. Christine Schreiner <christine.schreiner@sickkids.ca>
+Description: Filtering package which categorizes and counts how many mutations at a specific location occur within hard clipped reads. Uses a sample's BAM file and RDA file to determine the legitimacy (whether or not a mutation occurs within a hard clipped read) of each mutation within the RDA file. This is done by checking whether any reads in the BAM file contains any reads which occur in the same position and chromosome as a mutation in the RDA file, and which also occurs within a hard clipped region (determined by the CIGAR string of reads from the BAM file)
+License: GPL-2
+LazyData: TRUE
+Depends: R (>= 3.0), Rsamtools (>= 1.18), plyr (>= 1.8),
+        ShlienLab.Core.SNV (>= 0.5)
+NeedsCompilation: no
+Packaged: 2017-04-11 15:55:04 UTC; richard de borja

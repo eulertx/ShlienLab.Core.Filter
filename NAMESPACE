@@ -1,0 +1,16 @@
+exportPattern("^[[:alpha:]]+")
+export(
+  "add.flagged.count.column",
+  "add.snvid",
+  "cigar_to_data_frame",
+  "create.panel.of.normal.dataframe",
+  "create_panel_of_normal_count_table",
+  "flag.complex.overlap.loci",
+  "get.recurrent.snvids",
+  "get_cigar_mutations",
+  "get_cigar_type",
+  "get_position_reads",
+  "get_which",
+  "load_bam_reads",
+  "run_snv_filter_postprocessing"
+  )

@@ -1,0 +1,71 @@
+CURRENT WORK, DELETION READ CHECK:
+
+Within the md_snv_position.R file, there are some changes being made concerning
+how reads with deletions are being parsed for other mutations. No commits have
+been made concerning this, but Chrissy will be working on them during the
+beginning of 2017.
+
+NEXT STEP, INSERTION READ CHECK:
+
+Currently, any hard clip read overlapping a mutated location which contains an
+insertion will be automatically marked as mutated at that location, unless the
+read is otherwise unmutated. However, if there is a mutation which occurs on
+that read, regardless of the position of the read’s mutation (if it is at the
+same position as the recorded mutation or not) the read will be added to the
+ovarall count of hard clipped reads with a mutation there.
+
+It is this way currently because to implement a check for insertion mutations,
+it requires more information than just looking at the CIGAR string and MD tag
+from the BAM file. The SEQ value would also not give any insight into the
+position of the insertion, so more investigation would have to be completed
+before implementing this check.
+
+This would all be done within the md_snv_position.R file, as a new case if
+the read contains any insertins (indicated by an I in the CIGAR string).
+
+I believe this check is very important though, and should be implemented as
+soon as possible. This case of false positive hard clipped mutations within
+reads with insertions is common, and is the pretext for many false positives
+in initial analysis (dream challenge truth set).
+
+NEXT STEP, QUALITY FILTER:
+
+Currently, a read will be marked as having a mutation at a certain location
+regardless of the quality of the read. This means that the reads which have
+a very low mapping quality will also contribute to whether or not a mutation
+is flagged as being a potential clipped artefact. To remedy this, a couple of
+things could be taken into considerations when flagging a read as having a
+clipped mutation.
+
+	1) Mapping quality (mapq) of the read:
+		A read as a whole is given a map quality, signified by the
+		mapq attribute within the corresponding BAM file. The higher
+		the mapping quality, the better the read. This mapping quality
+		may be affected if the read is clipped.
+
+	2) Base quality (qual) of each base within the read:
+		Each base within the read has a corresponding quality associated
+		with it, signified by the qual attribute in the corresponding
+		BAM file. This attribute assigns an ASCII character to each base
+		representing that base’s quality (bases themselves are kept in
+		the seq attribute). Read the FASTQ link below for more information.
+
+My suggestion is to implement a threshold (numerical or having some more
+requirements)  as a cutoff for whether a clipped read should have its mutation
+counted toward the total clipped mutation count at that location, based on both
+mapping and base quality.
+
+
+REFERENCES:
+
+General BAM file formatting: https://samtools.github.io/hts-specs/SAMv1.pdf
+FASTQ and base quality: https://en.wikipedia.org/wiki/FASTQ_format
+MuTect quality overview: http://gatkforums.broadinstitute.org/gatk/discussion/4464/how-mutect-filters-candidate-mutations
+
+AUTHOR:
+
+L Christine Schreiner <christine.schreiner@sickkids.ca>
+
+LAST UPDATED:
+
+21-12-2016
